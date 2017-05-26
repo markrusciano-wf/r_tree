@@ -57,14 +57,12 @@ abstract class Node extends RTreeContributor {
     return _area(newRect) - _area(_minimumBoundingRect);
   }
 
-  num _area(Rectangle rect) =>
-      (rect.right - rect.left) * (rect.bottom - rect.top);
+  num _area(Rectangle rect) => (rect.right - rect.left) * (rect.bottom - rect.top);
 
   // Adds the rectangle containing @item to this Node's _minimumBoundingRectangle
   void include(RTreeContributor item) {
-    _minimumBoundingRect = _minimumBoundingRect == null
-        ? item.rect
-        : _minimumBoundingRect.boundingBox(item.rect);
+    _minimumBoundingRect =
+        _minimumBoundingRect == null ? item.rect : _minimumBoundingRect.boundingBox(item.rect);
   }
 
   void updateBoundingRect() {
@@ -97,8 +95,7 @@ abstract class Node extends RTreeContributor {
     return splitNode;
   }
 
-  _reassignRemainingChildren(
-      List<RTreeContributor> remainingChildren, Node splitNode) {
+  _reassignRemainingChildren(List<RTreeContributor> remainingChildren, Node splitNode) {
     remainingChildren.forEach((RTreeContributor child) {
       num thisExpansionCost = expansionCost(child);
       num splitExpansionCost = splitNode.expansionCost(child);
@@ -132,8 +129,7 @@ abstract class Node extends RTreeContributor {
     });
 
     RTreeContributor a, b, c, d;
-    if (_horizontalDifference(leftmost, rightmost) >
-        _verticalDifference(topmost, bottommost)) {
+    if (_horizontalDifference(leftmost, rightmost) > _verticalDifference(topmost, bottommost)) {
       a = leftmost;
       b = rightmost;
       c = bottommost;
@@ -159,12 +155,10 @@ abstract class Node extends RTreeContributor {
     return new _Seeds(seed1, seed2);
   }
 
-  num _horizontalDifference(
-          RTreeContributor leftmost, RTreeContributor rightmost) =>
+  num _horizontalDifference(RTreeContributor leftmost, RTreeContributor rightmost) =>
       (rightmost.rect.left - leftmost.rect.right).abs();
 
-  num _verticalDifference(
-          RTreeContributor topmost, RTreeContributor bottommost) =>
+  num _verticalDifference(RTreeContributor topmost, RTreeContributor bottommost) =>
       (topmost.rect.bottom - bottommost.rect.top).abs();
 }
 

@@ -23,8 +23,6 @@ abstract class RTreeContributor {
   // Rectangles that share only a border are not considered to overlap
   bool overlaps(Rectangle otherRect) {
     Rectangle intersection = rect.intersection(otherRect);
-    return intersection != null &&
-        intersection.height > 0 &&
-        intersection.width > 0;
+    return intersection != null && intersection.height > 0 && intersection.width > 0;
   }
 }

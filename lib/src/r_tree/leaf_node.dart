@@ -31,8 +31,7 @@ class LeafNode extends Node {
 
   @override
   Iterable<RTreeDatum> search(Rectangle searchRect, RTreeTest test) {
-    return _items
-        .where((RTreeDatum item) => item.overlaps(searchRect) && test(item));
+    return _items.where((RTreeDatum item) => item.overlaps(searchRect) && test(item));
   }
 
   @override

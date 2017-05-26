@@ -1,9 +1,9 @@
-library leaf_node;
+library r_tree.leaf_node;
 
 import 'dart:math';
 
 import 'package:r_tree/r_tree.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('LeafNode', () {
@@ -31,8 +31,7 @@ void main() {
         expect(leaf.rect, equals(new Rectangle(0, 0, 1, 1)));
         expect(leaf.size, equals(1));
 
-        RTreeDatum nextChild =
-            new RTreeDatum(new Rectangle(1, 1, 1, 1), 'Item 1');
+        RTreeDatum nextChild = new RTreeDatum(new Rectangle(1, 1, 1, 1), 'Item 1');
         leaf.addChild(nextChild);
 
         expect(leaf.rect, equals(new Rectangle(0, 0, 2, 2)));
@@ -42,8 +41,7 @@ void main() {
 
         expect(leaf.rect, equals(new Rectangle(0, 0, 1, 1)));
         expect(leaf.size, equals(1));
-        expect(leaf.search(new Rectangle(1, 1, 1, 1), (_) => true).length,
-            equals(0));
+        expect(leaf.search(new Rectangle(1, 1, 1, 1), (_) => true).length, equals(0));
 
         leaf.clearChildren();
 

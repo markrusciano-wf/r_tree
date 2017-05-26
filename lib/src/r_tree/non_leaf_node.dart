@@ -75,19 +75,30 @@ class NonLeafNode extends Node {
     });
   }
 
+  final Error nonNodeError =
+      new ArgumentError("A non-leaf node can only have children of type Node");
+
   @override
-  void addChild(Node child) {
-    super.addChild(child);
-    child.parent = this;
+  void addChild(RTreeContributor child) {
+    if (child is Node) {
+      super.addChild(child);
+      child.parent = this;
+    } else {
+      throw nonNodeError;
+    }
   }
 
   @override
-  void removeChild(Node child) {
-    super.removeChild(child);
-    child.parent = null;
+  void removeChild(RTreeContributor child) {
+    if (child is Node) {
+      super.removeChild(child);
+      child.parent = null;
 
-    if (_childNodes.length == 0) {
-      _convertToLeafNode();
+      if (_childNodes.length == 0) {
+        _convertToLeafNode();
+      }
+    } else {
+      throw nonNodeError;
     }
   }
 

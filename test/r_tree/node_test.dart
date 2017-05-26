@@ -1,7 +1,7 @@
-library node_test;
+library r_tree.node_test;
 
 import 'package:r_tree/r_tree.dart';
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'dart:math';
 
 void main() {
@@ -15,8 +15,7 @@ void main() {
 
         for (int i = 0; i < 4; i++) {
           String itemId = 'Item $i';
-          itemMap[itemId] =
-              new RTreeDatum<String>(new Rectangle(0, i, 1, 1), itemId);
+          itemMap[itemId] = new RTreeDatum<String>(new Rectangle(0, i, 1, 1), itemId);
           leafNode.addChild(itemMap[itemId]);
         }
 
@@ -30,8 +29,7 @@ void main() {
 
         for (int i = 0; i < 4; i++) {
           String itemId = 'Item $i';
-          itemMap[itemId] =
-              new RTreeDatum<String>(new Rectangle(0, i, 1, 1), itemId);
+          itemMap[itemId] = new RTreeDatum<String>(new Rectangle(0, i, 1, 1), itemId);
           leafNode.addChild(itemMap[itemId]);
         }
 
@@ -39,8 +37,7 @@ void main() {
 
         LeafNode splitNode = leafNode.splitIfNecessary();
 
-        Iterable<RTreeDatum> items =
-            leafNode.search(new Rectangle(0, 0, 1, 10), trueFunc);
+        Iterable<RTreeDatum> items = leafNode.search(new Rectangle(0, 0, 1, 10), trueFunc);
         expect(items.length, equals(leafNode.size));
         expect(leafNode.size, equals(2));
         expect(items.contains(itemMap['Item 0']), equals(true));
@@ -59,8 +56,7 @@ void main() {
 
         for (int i = 0; i < 4; i++) {
           String itemId = 'Item $i';
-          itemMap[itemId] =
-              new RTreeDatum<String>(new Rectangle(i, 0, 1, 1), itemId);
+          itemMap[itemId] = new RTreeDatum<String>(new Rectangle(i, 0, 1, 1), itemId);
           leafNode.addChild(itemMap[itemId]);
         }
 
@@ -68,8 +64,7 @@ void main() {
 
         LeafNode splitNode = leafNode.splitIfNecessary();
 
-        Iterable<RTreeDatum> items =
-            leafNode.search(new Rectangle(0, 0, 10, 1), trueFunc);
+        Iterable<RTreeDatum> items = leafNode.search(new Rectangle(0, 0, 10, 1), trueFunc);
         expect(items.length, equals(leafNode.size));
         expect(leafNode.size, equals(2));
         expect(items.contains(itemMap['Item 0']), equals(true));
@@ -88,8 +83,7 @@ void main() {
 
         for (int i = 0; i < 4; i++) {
           String itemId = 'Item $i';
-          itemMap[itemId] =
-              new RTreeDatum<String>(new Rectangle(i, 0, 1, 1), itemId);
+          itemMap[itemId] = new RTreeDatum<String>(new Rectangle(i, 0, 1, 1), itemId);
           leafNode.addChild(itemMap[itemId]);
         }
 
@@ -97,8 +91,7 @@ void main() {
 
         LeafNode splitNode = leafNode.splitIfNecessary();
 
-        Iterable<RTreeDatum> items =
-            leafNode.search(new Rectangle(0, 0, 10, 1), trueFunc);
+        Iterable<RTreeDatum> items = leafNode.search(new Rectangle(0, 0, 10, 1), trueFunc);
         expect(items.length, equals(leafNode.size));
         expect(leafNode.size, equals(2));
         expect(items.contains(itemMap['Item 0']), equals(true));
@@ -116,24 +109,16 @@ void main() {
       test('expansionCost correctly calculated', () {
         LeafNode node = new LeafNode(3);
 
-        expect(
-            node.expansionCost(new RTreeDatum(new Rectangle(0, 0, 1, 1), '')),
-            equals(1));
+        expect(node.expansionCost(new RTreeDatum(new Rectangle(0, 0, 1, 1), '')), equals(1));
 
         node.addChild(new RTreeDatum(new Rectangle(0, 0, 1, 1), ''));
 
-        expect(
-            node.expansionCost(new RTreeDatum(new Rectangle(0, 0, 1, 1), '')),
-            equals(0));
-        expect(
-            node.expansionCost(new RTreeDatum(new Rectangle(1, 1, 1, 1), '')),
-            equals(3));
+        expect(node.expansionCost(new RTreeDatum(new Rectangle(0, 0, 1, 1), '')), equals(0));
+        expect(node.expansionCost(new RTreeDatum(new Rectangle(1, 1, 1, 1), '')), equals(3));
 
         node.addChild(new RTreeDatum(new Rectangle(2, 2, 1, 1), ''));
 
-        expect(
-            node.expansionCost(new RTreeDatum(new Rectangle(1, 1, 3, 3), '')),
-            equals(7));
+        expect(node.expansionCost(new RTreeDatum(new Rectangle(1, 1, 3, 3), '')), equals(7));
       });
     });
 
@@ -152,8 +137,7 @@ void main() {
             itemId += 'pass';
           }
 
-          itemMap[itemId] =
-              new RTreeDatum<String>(new Rectangle(i, 0, 1, 1), itemId);
+          itemMap[itemId] = new RTreeDatum<String>(new Rectangle(i, 0, 1, 1), itemId);
           leafNode.addChild(itemMap[itemId]);
         }
 
@@ -165,17 +149,14 @@ void main() {
             itemId += 'pass';
           }
 
-          itemMap[itemId] =
-              new RTreeDatum<String>(new Rectangle(i, 1, 1, 1), itemId);
+          itemMap[itemId] = new RTreeDatum<String>(new Rectangle(i, 1, 1, 1), itemId);
           leafNode.addChild(itemMap[itemId]);
         }
 
         var items = leafNode.search(new Rectangle(0, 0, 10, 1), testFunc);
         expect(items.length, equals(3));
-        expect(
-            items.map((i) => i.value),
-            unorderedEquals(
-                ['Item in 0pass', 'Item in 1pass', 'Item in 2pass']));
+        expect(items.map((i) => i.value),
+            unorderedEquals(['Item in 0pass', 'Item in 1pass', 'Item in 2pass']));
       });
     });
   });

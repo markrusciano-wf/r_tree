@@ -57,10 +57,6 @@ class RTree<E> {
     // If a test is not given, use a test function that always returns true
     test = test ?? (_) => true;
 
-    if (_root is LeafNode) {
-      return _root.search(searchRect, test).toList();
-    }
-
     return _root.search(searchRect, test);
   }
 

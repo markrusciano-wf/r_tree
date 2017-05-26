@@ -10,6 +10,9 @@
 #
 # More info about config lint config options is here
 # https://www.dartlang.org/guides/language/analysis-options#excluding-lines-within-a-file
+analyzer:
+  strong-mode: true
+
 linter:
   rules:
     # Style: Declare method return types.
