@@ -1,6 +1,10 @@
 packages
+.packages
+.pub/
 .idea/
 *.iml
 *.iws
 
 pubspec.lock
+
+.vscode

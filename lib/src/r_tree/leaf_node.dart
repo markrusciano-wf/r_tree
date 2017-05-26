@@ -14,33 +14,40 @@
  * limitations under the License.
  */
 
- part of r_tree;
+part of r_tree;
 
 class LeafNode extends Node {
   List<RTreeDatum> _items = [];
+
+  LeafNode(int branchFactor) : super(branchFactor);
+
+  @override
   List<RTreeDatum> get children => _items;
 
-  LeafNode(int branchFactor)
-    : super(branchFactor);
-
+  @override
   Node createNewNode() {
     return new LeafNode(branchFactor);
   }
-  
-  Iterable<RTreeDatum> search(Rectangle searchRect) {
-    return _items.where((RTreeDatum item) => item.overlaps(searchRect));
+
+  @override
+  Iterable<RTreeDatum> search(Rectangle searchRect, RTreeTest test) {
+    return _items
+        .where((RTreeDatum item) => item.overlaps(searchRect) && test(item));
   }
 
+  @override
   Node insert(RTreeDatum item) {
     addChild(item);
     return splitIfNecessary();
   }
 
-  remove(RTreeDatum item) {
+  @override
+  void remove(RTreeDatum item) {
     removeChild(item);
   }
 
-  clearChildren() {
+  @override
+  void clearChildren() {
     _items = [];
     _minimumBoundingRect = null;
   }

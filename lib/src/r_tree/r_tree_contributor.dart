@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
- part of r_tree;
+part of r_tree;
 
 // All objects that are used to build an RTree must extend RTreeContributor
 abstract class RTreeContributor {
   Rectangle get rect;
-  
+
   // Rectangles that share only a border are not considered to overlap
   bool overlaps(Rectangle otherRect) {
     Rectangle intersection = rect.intersection(otherRect);
-    return intersection != null && intersection.height > 0 && intersection.width > 0;
+    return intersection != null &&
+        intersection.height > 0 &&
+        intersection.width > 0;
   }
 }

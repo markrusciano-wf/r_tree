@@ -6,7 +6,7 @@ import '../lib/r_tree.dart';
 
 final int BRANCH_FACTOR = 16;
 
-main() {
+void main() {
   RTreeBenchmark.main();
 }
 
@@ -16,6 +16,7 @@ class RTreeBenchmark {
     RemoveBenchmark.main();
     SearchBenchmark1.main();
     SearchBenchmark2.main();
+    SearchBenchmark3.main();
   }
 }
 
@@ -28,8 +29,8 @@ class InsertBenchmark extends BenchmarkBase {
     new InsertBenchmark().report();
   }
 
+  @override
   void run() {
-    Iterable<RTreeDatum<String>> items;
     Random rand = new Random();
     for (int i = 0; i < 5000; i++) {
       int x = rand.nextInt(100000);
@@ -41,12 +42,13 @@ class InsertBenchmark extends BenchmarkBase {
     }
   }
 
+  @override
   void setup() {
     tree = new RTree<String>(BRANCH_FACTOR);
   }
 
-  void teardown() {
-  }
+  @override
+  void teardown() {}
 }
 
 class RemoveBenchmark extends BenchmarkBase {
@@ -59,6 +61,7 @@ class RemoveBenchmark extends BenchmarkBase {
     new RemoveBenchmark().report();
   }
 
+  @override
   void run() {
     for (int i = 0; i < 100; i++) {
       for (int j = 0; j < 50; j++) {
@@ -67,6 +70,7 @@ class RemoveBenchmark extends BenchmarkBase {
     }
   }
 
+  @override
   void setup() {
     tree = new RTree<String>(BRANCH_FACTOR);
 
@@ -75,19 +79,21 @@ class RemoveBenchmark extends BenchmarkBase {
         if (items.length <= i) {
           items.add([]);
         }
-        
+
         Rectangle rect = new Rectangle(i, j, 1, 1);
         items[i].add(new RTreeDatum<String>(rect, 'item $i:$j'));
       }
     }
   }
 
-  void teardown() {
-  }
+  @override
+  void teardown() {}
 }
 
 class SearchBenchmark1 extends BenchmarkBase {
-  SearchBenchmark1() : super("Search 5000 items. (500 rectangles, 10 items each) Find all 10 items for each of the 500 rectangles.");
+  SearchBenchmark1()
+      : super(
+            "Search 5000 items. (500 rectangles, 10 items each) Find all 10 items for each of the 500 rectangles.");
 
   RTree<String> tree;
 
@@ -95,6 +101,7 @@ class SearchBenchmark1 extends BenchmarkBase {
     new SearchBenchmark1().report();
   }
 
+  @override
   void run() {
     for (int i = 0; i < 10; i++) {
       for (int j = 0; j < 50; j++) {
@@ -103,6 +110,7 @@ class SearchBenchmark1 extends BenchmarkBase {
     }
   }
 
+  @override
   void setup() {
     tree = new RTree(BRANCH_FACTOR);
 
@@ -123,28 +131,31 @@ class SearchBenchmark1 extends BenchmarkBase {
     }
   }
 
-  void teardown() {
-  }
+  @override
+  void teardown() {}
 }
 
 class SearchBenchmark2 extends BenchmarkBase {
-  SearchBenchmark2() : super("Search 30000 items. (10000 rectangles. 3 items each) Find all 3 items for 5000 of the rectangles.");
+  SearchBenchmark2()
+      : super(
+            "Search 30000 items. (10000 rectangles. 3 items each) Find all 3 items for 5000 of the rectangles.");
 
   RTree<String> tree;
-  
+
   static void main() {
     new SearchBenchmark2().report();
   }
 
+  @override
   void run() {
-    Iterable<RTreeDatum<String>> items;
     for (int i = 0; i < 100; i++) {
       for (int j = 0; j < 50; j++) {
-        items = tree.search(new Rectangle(i, j, 1, 1));
+        tree.search(new Rectangle(i, j, 1, 1));
       }
     }
   }
 
+  @override
   void setup() {
     tree = new RTree<String>(BRANCH_FACTOR);
 
@@ -158,6 +169,52 @@ class SearchBenchmark2 extends BenchmarkBase {
     }
   }
 
-  void teardown() {
+  @override
+  void teardown() {}
+}
+
+class SearchBenchmark3 extends BenchmarkBase {
+  SearchBenchmark3()
+      : super(
+            "Search 5000 items. (500 rectangles, 10 items each) Find all 2 items that pass the test for each of the 500 rectangles.");
+
+  RTree<String> tree;
+
+  static void main() {
+    new SearchBenchmark3().report();
   }
+
+  @override
+  void run() {
+    for (int i = 0; i < 10; i++) {
+      for (int j = 0; j < 50; j++) {
+        tree.search(new Rectangle(i, j, 1, 1),
+            test: (RTreeDatum<String> d) => d.value.contains('1'));
+      }
+    }
+  }
+
+  @override
+  void setup() {
+    tree = new RTree(BRANCH_FACTOR);
+
+    for (int i = 0; i < 10; i++) {
+      for (int j = 0; j < 50; j++) {
+        Rectangle rect = new Rectangle(i, j, 1, 1);
+        tree.insert(new RTreeDatum<String>(rect, 'item1'));
+        tree.insert(new RTreeDatum<String>(rect, 'item2'));
+        tree.insert(new RTreeDatum<String>(rect, 'item3'));
+        tree.insert(new RTreeDatum<String>(rect, 'item4'));
+        tree.insert(new RTreeDatum<String>(rect, 'item5'));
+        tree.insert(new RTreeDatum<String>(rect, 'item6'));
+        tree.insert(new RTreeDatum<String>(rect, 'item7'));
+        tree.insert(new RTreeDatum<String>(rect, 'item8'));
+        tree.insert(new RTreeDatum<String>(rect, 'item9'));
+        tree.insert(new RTreeDatum<String>(rect, 'item10'));
+      }
+    }
+  }
+
+  @override
+  void teardown() {}
 }

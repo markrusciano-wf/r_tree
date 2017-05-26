@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
- part of r_tree;
+part of r_tree;
+
+typedef bool RTreeTest<E>(RTreeDatum<E> item);
 
 class RTree<E> {
   Node _root;
   int _branchFactor;
-  
+
   RTree([int branchFactor = 16]) {
     if (branchFactor < 3) {
       throw new ArgumentError('branchFactor must be greater than 2');
@@ -27,18 +29,18 @@ class RTree<E> {
     _branchFactor = branchFactor;
     _resetRoot();
   }
-  
-  remove(RTreeDatum<E> item) {
+
+  void remove(RTreeDatum<E> item) {
     _root.remove(item);
 
     if (_root.children.length == 0) {
       _resetRoot();
     }
   }
-  
-  insert(RTreeDatum<E> item) {
+
+  void insert(RTreeDatum<E> item) {
     Node splitNode = _root.insert(item);
-    
+
     if (splitNode != null) {
       _growTree(_root, splitNode);
     }
@@ -48,16 +50,20 @@ class RTree<E> {
     _root = new LeafNode(_branchFactor);
   }
 
-  // Returns all items whose rectangles overlap the @searchRect
-  //  Note: Rectangles that share only a border are not considered to overlap
-  Iterable<RTreeDatum<E>> search(Rectangle searchRect) {
+  /// Returns all items whose rectangles overlap the [searchRect] that satisfy [test]
+  /// Note: Rectangles that share only a border are not considered to overlap
+  /// If [test] is not specified, a test function that always returns true will be used
+  Iterable<RTreeDatum<E>> search(Rectangle searchRect, {RTreeTest<E> test}) {
+    // If a test is not given, use a test function that always returns true
+    test = test ?? (_) => true;
+
     if (_root is LeafNode) {
-      return _root.search(searchRect).toList();
+      return _root.search(searchRect, test).toList();
     }
-    
-    return _root.search(searchRect);
+
+    return _root.search(searchRect, test);
   }
-  
+
   _growTree(Node node1, Node node2) {
     NonLeafNode newRoot = new NonLeafNode(_branchFactor);
     newRoot.addChild(node1);

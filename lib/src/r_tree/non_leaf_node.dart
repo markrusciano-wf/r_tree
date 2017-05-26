@@ -14,34 +14,38 @@
  * limitations under the License.
  */
 
- part of r_tree;
+part of r_tree;
 
 class NonLeafNode extends Node {
   List<Node> _childNodes = [];
+
+  NonLeafNode(int branchFactor) : super(branchFactor);
+
+  @override
   List<Node> get children => _childNodes;
 
-  NonLeafNode(int branchFactor) 
-    : super(branchFactor);
-
+  @override
   Node createNewNode() {
     return new NonLeafNode(branchFactor);
   }
 
-  Iterable<RTreeDatum> search(Rectangle searchRect) {
+  @override
+  Iterable<RTreeDatum> search(Rectangle searchRect, RTreeTest test) {
     List<RTreeDatum> overlappingLeafs = [];
-    
+
     _childNodes.forEach((Node childNode) {
       if (childNode.overlaps(searchRect)) {
-        overlappingLeafs.addAll(childNode.search(searchRect));
+        overlappingLeafs.addAll(childNode.search(searchRect, test));
       }
     });
-    
+
     return overlappingLeafs;
   }
 
+  @override
   Node insert(RTreeDatum item) {
     include(item);
-    
+
     Node bestNode = _getBestNodeForInsert(item);
     Node splitNode = bestNode.insert(item);
 
@@ -52,30 +56,33 @@ class NonLeafNode extends Node {
     return splitIfNecessary();
   }
 
-  remove(RTreeDatum item) {
+  @override
+  void remove(RTreeDatum item) {
     List<Node> childrenToRemove = [];
-    
+
     _childNodes.forEach((Node childNode) {
       if (childNode.overlaps(item.rect)) {
         childNode.remove(item);
-        
+
         if (childNode.size == 0) {
           childrenToRemove.add(childNode);
         }
       }
     });
-    
+
     childrenToRemove.forEach((Node child) {
       removeChild(child);
     });
   }
-  
-  addChild(Node child) {
+
+  @override
+  void addChild(Node child) {
     super.addChild(child);
     child.parent = this;
   }
 
-  removeChild(Node child) {
+  @override
+  void removeChild(Node child) {
     super.removeChild(child);
     child.parent = null;
 
@@ -84,7 +91,8 @@ class NonLeafNode extends Node {
     }
   }
 
-  clearChildren() {
+  @override
+  void clearChildren() {
     _childNodes = [];
     _minimumBoundingRect = null;
   }
@@ -101,7 +109,7 @@ class NonLeafNode extends Node {
         bestNode = child;
       }
     });
-    
+
     return bestNode;
   }
 

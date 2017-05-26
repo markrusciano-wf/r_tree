@@ -4,7 +4,7 @@ import 'package:r_tree/r_tree.dart';
 import 'package:unittest/unittest.dart';
 import 'dart:math';
 
-main() {
+void main() {
   group('NonLeafNode', () {
     group('createNewNode', () {
       test('test that the right type of Node is created', () {
@@ -43,7 +43,8 @@ main() {
 
         expect(node.rect, equals(new Rectangle(0, 0, 1, 1)));
         expect(node.size, equals(1));
-        expect(node.search(new Rectangle(1, 1, 1, 1)).length, equals(0));
+        expect(node.search(new Rectangle(1, 1, 1, 1), (_) => true).length,
+            equals(0));
 
         node.clearChildren();
 
